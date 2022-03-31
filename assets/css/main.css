@@ -1,6 +1,36 @@
+body {
+    background-image: url(../imagens/Fundo.jpg);
+    background-size: 100vw 100vh ;
+    background-repeat: no-repeat;
+    color: white;
+
+}
+
 div.container {
-    background-color: rgba(1, 1, 1, .2);
+    background-color: rgba(1, 1, 1, .4);
     margin-top: 3%;
     border: 1px solid rgba(1, 1, 1, .6);
     box-shadow: 3px 3px 3px rgba(1, 1, 1, .6);
+    border-radius: 10px;
+}
+
+div.container .mb-3 button{
+    border: none;
+    background-color: rgba(1, 1, 1, .5);
+    box-shadow: 3px 3px 3px rgba(1, 1, 1, .6);
+    transition: .6s;
+}
+div.container .mb-3 button:hover{
+    font-size: 15pt;
+    box-shadow: 6px 6px 6px rgba(1, 1, 1, .6);
+    background-color: rgba(74, 0, 83, 0.5);
+}
+
+div.container li{
+    color: rgba(214, 214, 214, 0.7);
+   background-color: rgba(1, 1, 1, .7);
+   transition: .6s;
+}
+div.container li:hover{
+    background-color: rgba(0, 1, 73, 0.7);
 }
