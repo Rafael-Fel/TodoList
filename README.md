@@ -1,4 +1,4 @@
-# todolist-senai
+# TodoList
 Uma Todo List para exercício do curso de Desenvolvimento Front End do Senai RJ
 
 1. [x] Criar o repositório no github
