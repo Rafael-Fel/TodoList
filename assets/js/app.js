@@ -36,6 +36,9 @@ function addTodo(todoText){
     const input = document.createElement("input");
     input.type = 'checkbox';
     input.classList.add("form-check-input");
+    input.onclick = function () {
+        return checkTodo(this);
+    }
 
     const label = document.createElement("label");
     label.classList.add("form-check-label");
@@ -69,7 +72,7 @@ inputTodo.addEventListener("keydown", (evento) => {
 
 const btnAddTodo = getItem("#btn-add-todo");
 btnAddTodo.addEventListener("click", (evento) => {
-    
+    const inputValue = inputTodo.value;
 
     console.log(inputValue);
     if (inputValue == "") {
@@ -79,3 +82,13 @@ btnAddTodo.addEventListener("click", (evento) => {
         inputTodo.value = "";
     }
 });
+
+function checkTodo(checkbox) {
+    const label = checkbox.nextElementSibling;
+
+    if (checkbox.checked == true) {
+        label.classList.add("todo-done");
+    } else {
+        label.classList.remove("todo-done");
+    }
+}

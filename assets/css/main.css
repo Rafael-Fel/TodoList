@@ -34,3 +34,7 @@ div.container li{
 div.container li:hover{
     background-color: rgba(0, 1, 73, 0.7);
 }
+
+.todo-done{
+    text-decoration: line-through; 
+}
