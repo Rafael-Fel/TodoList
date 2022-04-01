@@ -54,18 +54,28 @@ function addTodo(todoText){
     todoList.appendChild(listItem); //<ul>.....<li>mais uma tarefa</li></ul>
 }
 
+const inputTodo = getItem("#input-todo");
+
+inputTodo.addEventListener("keydown", (evento) => {
+    const inputValue = inputTodo.value;
+    if (inputValue == "") {
+        console.log("String vazia");} else 
+    if(evento.code == 'Enter'){
+        console.log('Enter pressionado');
+        addTodo(inputValue);
+        inputTodo.value = "";
+    }
+});
+
 const btnAddTodo = getItem("#btn-add-todo");
 btnAddTodo.addEventListener("click", (evento) => {
-    const inputTodo = getItem("#input-todo");
-    const inputValue = inputTodo.value;
+    
 
     console.log(inputValue);
     if (inputValue == "") {
         console.log("String vazia");
     } else {
         addTodo(inputValue);
-       
         inputTodo.value = "";
     }
 });
-
