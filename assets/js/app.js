@@ -1,71 +1,98 @@
-/*
+const storage = window.localStorage;
+
 function getItem(item) {
     return document.querySelector(item);
 }
 
-const btnAddTodo = getItem("#btn-add-todo");
-btnAddTodo.addEventListener("click", (evento) => {
-    const inputTodo = getItem("#input-todo");
-    const inputValue = inputTodo.value;
+function saveTodo(todo) {
+    const savedTodoList = JSON.parse(storage.getItem('todoList'));
 
-    console.log(inputValue);
-    if (inputValue == "") {
-        console.log("String vazia");
-    } else {
-        const todoList = getItem("#todo-list");
+    addToList({
+        id: savedTodoList.length,
+        ...todo
+    });
+    
+    const newTodo = {
+        id: savedTodoList.length,
+        ...todo
+    }
+
+    savedTodoList.push(newTodo);
+    storage.setItem('todoList', JSON.stringify(savedTodoList));
+}
+
+function excluirTodo(todo){
+    const savedTodoList = JSON.parse(storage.getItem('todoList'));
+    const newSavedTodoList = savedTodoList.filter( (item) =>{ return item.done == false});
+        console.log(savedTodoList)
+    console.log(newSavedTodoList)
+    storage.setItem('todoList', JSON.stringify(newSavedTodoList));
+    location.reload();
+}
+
+function updateTodo(todo){
+    const savedTodoList = JSON.parse(storage.getItem('todoList'));
+    const newSavedTodoList = savedTodoList.map((item) => {
+        if(item.id == todo.id){
+            item.done = todo.done;
+        }
+        return item;
+    })
+
+    storage.setItem('todoList', JSON.stringify(newSavedTodoList));
+}
+
+function addToList(todo) {
+    if (todo.title != "") {
+        const div = document.createElement("div");
+        div.classList.add("form-check");
+
+        const input = document.createElement("input");
+        input.type = 'checkbox';
+        input.classList.add("form-check-input");
+        input.onclick = function () {
+            return checkTodo(this);
+        }
+
+        const label = document.createElement("label");
+        label.classList.add("form-check-label");
+        input.value = todo.id;
+        if (todo.done) {
+            label.classList.add("todo-done");
+            input.checked = true;
+        }
+
+        const textItem = document.createTextNode(todo.title); //Texto criado
+
+        label.appendChild(textItem);
+        div.appendChild(input);
+        div.appendChild(label);
 
         const listItem = document.createElement("li"); // <li></li>
-        const textItem = document.createTextNode(inputValue); //Texto criado
-    
-        listItem.appendChild(textItem); //<li>mais uma tarefa</li>
+        listItem.appendChild(div);
         listItem.classList.add("list-group-item");
 
+        const btntext = document.createTextNode("Editar");
+        const btneditar = document.createElement("button")
+        btneditar.classList.add("btneditar")
+        btneditar.setAttribute("value", "editar")
+        //btneditar.setAttribute("onclick")
+        listItem.appendChild(btneditar);
+        btneditar.appendChild(btntext)
+        //console.log(btnexcluir)
+        const todoList = getItem("#todo-list");
         todoList.appendChild(listItem); //<ul>.....<li>mais uma tarefa</li></ul>
-        inputTodo.value = "";
     }
-});*/
-
-function getItem(item) {
-    return document.querySelector(item);
-}
-
-function addTodo(todoText){
-    const div = document.createElement("div");
-    div.classList.add("form-check");
-
-    const input = document.createElement("input");
-    input.type = 'checkbox';
-    input.classList.add("form-check-input");
-    input.onclick = function () {
-        return checkTodo(this);
-    }
-
-    const label = document.createElement("label");
-    label.classList.add("form-check-label");
-    
-    const textItem = document.createTextNode(todoText); //Texto criado
-    
-    label.appendChild(textItem);
-    div.appendChild(input);
-    div.appendChild(label);
-
-    const listItem = document.createElement("li"); // <li></li>
-    listItem.appendChild(div); //<li>mais uma tarefa</li>
-    listItem.classList.add("list-group-item");
-
-    const todoList = getItem("#todo-list");
-    todoList.appendChild(listItem); //<ul>.....<li>mais uma tarefa</li></ul>
 }
 
 const inputTodo = getItem("#input-todo");
 
 inputTodo.addEventListener("keydown", (evento) => {
-    const inputValue = inputTodo.value;
-    if (inputValue == "") {
-        console.log("String vazia");} else 
-    if(evento.code == 'Enter'){
-        console.log('Enter pressionado');
-        addTodo(inputValue);
+    if (evento.code == 'Enter') {
+        saveTodo({
+            title: inputTodo.value,
+            done: false
+        });
         inputTodo.value = "";
     }
 });
@@ -73,14 +100,11 @@ inputTodo.addEventListener("keydown", (evento) => {
 const btnAddTodo = getItem("#btn-add-todo");
 btnAddTodo.addEventListener("click", (evento) => {
     const inputValue = inputTodo.value;
-
-    console.log(inputValue);
-    if (inputValue == "") {
-        console.log("String vazia");
-    } else {
-        addTodo(inputValue);
-        inputTodo.value = "";
-    }
+    saveTodo({
+        title: inputValue,
+        done: false
+    });
+    inputTodo.value = "";
 });
 
 function checkTodo(checkbox) {
@@ -91,4 +115,21 @@ function checkTodo(checkbox) {
     } else {
         label.classList.remove("todo-done");
     }
+
+    updateTodo({
+        id: checkbox.value,
+        done: checkbox.checked
+    });
 }
+
+let savedTodoList = storage.getItem('todoList');
+
+if(!Array.isArray(JSON.parse(savedTodoList))){
+    storage.setItem('todoList',JSON.stringify([]));
+    savedTodoList = '[]';
+}
+
+const todoListJson = JSON.parse(savedTodoList);
+todoListJson.map((todo) => {
+    addToList(todo);
+});
