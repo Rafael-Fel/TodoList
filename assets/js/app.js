@@ -24,8 +24,6 @@ function saveTodo(todo) {
 function excluirTodo(todo){
     const savedTodoList = JSON.parse(storage.getItem('todoList'));
     const newSavedTodoList = savedTodoList.filter( (item) =>{ return item.done == false});
-        console.log(savedTodoList)
-    console.log(newSavedTodoList)
     storage.setItem('todoList', JSON.stringify(newSavedTodoList));
     location.reload();
 }
